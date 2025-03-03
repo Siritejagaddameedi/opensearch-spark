@@ -158,8 +158,7 @@ case class JobOperator(
           incrementCounter(MetricConstants.RESULT_WRITER_FAILED_METRIC)
           throwableHandler.recordThrowable(
             s"Failed to write to result. Cause='${sanitizeSparkUpgradeErrorMessage(e.getMessage)}'",
-            e
-          )
+            e)
         case t: Throwable =>
           incrementCounter(MetricConstants.RESULT_WRITER_FAILED_METRIC)
           throwableHandler.recordThrowable(
