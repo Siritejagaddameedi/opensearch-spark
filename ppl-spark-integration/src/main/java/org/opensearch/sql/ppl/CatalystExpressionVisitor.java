@@ -79,6 +79,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 import static java.util.List.of;
+import static org.opensearch.sql.expression.function.BuiltinFunctionName.CIDR;
 import static org.opensearch.sql.expression.function.BuiltinFunctionName.EQUAL;
 import static org.opensearch.sql.ppl.CatalystPlanContext.findRelation;
 import static org.opensearch.sql.ppl.utils.BuiltinFunctionTransformer.createIntervalArgs;
@@ -349,7 +350,7 @@ public class CatalystExpressionVisitor extends AbstractNodeVisitor<Expression, C
                         )
                 );
             }
-            context.retainAllNamedParseExpressions(e -> e);
+            context.resetNamedParseExpressions();
         }
         context.setNamedParseExpressions(initialNameExpressions);
         return context.getNamedParseExpressions().push(new CaseWhen(seq(whens), Option.apply(elseValue)));
@@ -421,7 +422,7 @@ public class CatalystExpressionVisitor extends AbstractNodeVisitor<Expression, C
         Expression value = analyze(node.getValue(), context);
         Expression lower = analyze(node.getLowerBound(), context);
         Expression upper = analyze(node.getUpperBound(), context);
-        context.retainAllNamedParseExpressions(p -> p);
+        context.resetNamedParseExpressions();
         return context.getNamedParseExpressions().push(new org.apache.spark.sql.catalyst.expressions.And(new GreaterThanOrEqual(value, lower), new LessThanOrEqual(value, upper)));
     }
 
@@ -431,7 +432,7 @@ public class CatalystExpressionVisitor extends AbstractNodeVisitor<Expression, C
         Expression ipAddressExpression = context.getNamedParseExpressions().pop();
         analyze(node.getCidrBlock(), context);
         Expression cidrBlockExpression = context.getNamedParseExpressions().pop();
-        return context.getNamedParseExpressions().push(SerializableUdf.visit("cidr", of(ipAddressExpression,cidrBlockExpression)));
+        return context.getNamedParseExpressions().push(SerializableUdf.visit(CIDR, of(ipAddressExpression,cidrBlockExpression)));
     }
 
     @Override

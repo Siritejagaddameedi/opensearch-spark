@@ -349,7 +349,7 @@ joinType
    ;
 
 sideAlias
-   : (LEFT EQUAL leftAlias = ident)? COMMA? (RIGHT EQUAL rightAlias = ident)?
+   : (LEFT EQUAL leftAlias = qualifiedName)? COMMA? (RIGHT EQUAL rightAlias = qualifiedName)?
    ;
 
 joinCriteria
@@ -894,8 +894,8 @@ jsonFunctionName
    | JSON_APPEND
    | JSON_KEYS
    | JSON_VALID
-//   | JSON_EXTEND
-//   | JSON_SET
+   | JSON_EXTEND
+   | JSON_SET
 //   | JSON_ARRAY_ALL_MATCH
 //   | JSON_ARRAY_ANY_MATCH
 //   | JSON_ARRAY_FILTER
