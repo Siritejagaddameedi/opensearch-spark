@@ -583,7 +583,7 @@ class FlintREPLTest
     val expectedError = (
       """{"Message":"Fail to read data from Glue. Cause: Access denied in AWS Glue service. Please check permissions. (Service: AWSGlue; """ +
         """Status Code: 400; Error Code: AccessDeniedException; Request ID: null; Proxy: null)",""" +
-        """"ErrorSource":"AWSGlue","StatusCode":"400"}"""
+        """"ErrorSource":"AWSGlue","StatusCode":"400","ExceptionType":"com.amazonaws.services.glue.model.AccessDeniedException"}"""
     )
 
     val result = FlintREPL.processQueryException(exception, mockFlintStatement)
@@ -606,7 +606,7 @@ class FlintREPLTest
     val result = FlintREPL.processQueryException(exception, mockFlintCommand)
 
     val expectedError =
-      """{"Message":"Fail to run query. Cause: Access denied in AWS Glue service. Please check permissions."}"""
+      """{"Message":"Fail to run query. Cause: Access denied in AWS Glue service. Please check permissions.","ExceptionType":"java.lang.SecurityException"}"""
 
     result shouldEqual expectedError
     verify(mockFlintCommand).fail()

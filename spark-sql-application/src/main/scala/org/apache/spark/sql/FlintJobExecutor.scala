@@ -454,6 +454,7 @@ trait FlintJobExecutor {
     errorDetails.put("Message", errorMessage)
     errorSource.foreach(es => errorDetails.put("ErrorSource", es))
     statusCode.foreach(code => errorDetails.put("StatusCode", code.toString))
+    errorDetails.put("ExceptionType", t.getClass.getName)
 
     val errorJson = mapper.writeValueAsString(errorDetails)
     // Record the processed error message

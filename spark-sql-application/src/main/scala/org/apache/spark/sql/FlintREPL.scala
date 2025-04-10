@@ -778,7 +778,7 @@ object FlintREPL extends Logging with FlintJobExecutor {
                 sessionId,
                 startTime))
           case NonFatal(e) =>
-            val error = s"An unexpected error occurred: ${e.getMessage}"
+            val error = processQueryException(e)
             throwableHandler.recordThrowable(error, e)
             dataToWrite = Some(
               handleCommandFailureAndGetFailedData(

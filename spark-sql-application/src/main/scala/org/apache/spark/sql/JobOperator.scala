@@ -154,9 +154,10 @@ case class JobOperator(
         })
       } catch {
         case t: Throwable =>
+          val errorMessage = if (throwableHandler.hasException) throwableHandler.error else processQueryException(t)
           incrementCounter(MetricConstants.RESULT_WRITER_FAILED_METRIC)
           throwableHandler.recordThrowable(
-            s"Failed to write to result. Cause='${t.getMessage}', originalError='${throwableHandler.error}'",
+            errorMessage,
             t)
       } finally {
         emitTimerMetric(MetricConstants.QUERY_RESULT_WRITER_TIME_METRIC, resultWriterStartTime)
